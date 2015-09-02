@@ -1,0 +1,10 @@
+1. Vibrations when hit by bullets.
+2. Scrolling 2d background with more diverse enemies and bosses (possibly level editor)
+3. Better collisions
+4. Clean up code (structure,etc.)
+5. After 4 bullets, 2 second cooldown (cant keep firing all the time). (Bullet delay)
+6. Dynamic sizes and positions so it can fit on more android devices
+7. Particle explosions
+8. Light and day affects based off reading in data from day
+
+MAKE SURE TO TURN ON BULLET COLLISIONS AGAIN!!

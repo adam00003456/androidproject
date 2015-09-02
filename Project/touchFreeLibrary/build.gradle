@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion 19
+ 
+   buildToolsVersion '19.1.0'
+
+    
+defaultConfig {
+        
+minSdkVersion 16
+        
+targetSdkVersion 19
+
+     
+  ndk {
+           
+ moduleName "touch_free_library"
+      
+      stl 'gnustl_static'
+        
+    cFlags "-I/Users/Adam/Desktop/opencv/sdk/native/jni/include -llog -ldl"
+ 
+       }
+  
+  }
+
+
+  
+  buildTypes {
+  
+      release {
+   
+         minifyEnabled false
+ 
+           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+  
+      }
+    }
+
+}
+
+dependencies {
+    
+compile project(':opencv')
+
+}

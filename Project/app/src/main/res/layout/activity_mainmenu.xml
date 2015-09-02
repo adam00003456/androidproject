@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.adam.project.mainmenu">
+
+
+
+
+
+    <ImageView
+        android:id="@+id/scrollablebackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/starrynight"
+        android:adjustViewBounds="true"
+        android:gravity="center_vertical"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+    <!--android:layout_below="@+id/textView"-->
+
+    <com.example.adam.project.customtextview
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Galagaster"
+        android:textSize="45dp"
+        android:id="@+id/textView"
+
+        android:background="@drawable/back"
+        android:height="50dp"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_marginLeft="35dp"
+        android:background="@drawable/back"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+
+
+
+    <com.example.adam.project.customtextview
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Controls:"
+        android:id="@+id/textView2"
+        android:textSize="35dp"
+        android:background="@drawable/back"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAY!"
+        android:id="@+id/button"
+        android:textSize="30dp"
+        android:background="@drawable/back"
+        android:layout_marginBottom="31dp"
+        android:layout_marginRight="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>
