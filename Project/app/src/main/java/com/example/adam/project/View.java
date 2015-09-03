@@ -75,9 +75,19 @@ public class View extends SurfaceView
             enemylist.add(eo);
             enemx += 400;
         }
+
+
         //create spaceship and load it's different stages bitmaps
         spaceship = new Spaceship(BitmapFactory.decodeResource(getResources(), R.drawable.galaga), 20,
                 (int)(heightofscreen*.76));
+        Bitmap spaceshipBitMapToAddOne = BitmapFactory.decodeResource(getResources(),
+                R.drawable.galagahitone);
+        spaceship.addToArrayList(spaceshipBitMapToAddOne);
+        Bitmap spaceshipBitMapToAddTwo = BitmapFactory.decodeResource(getResources(),
+                R.drawable.galagahittwo);
+        spaceship.addToArrayList(spaceshipBitMapToAddTwo);
+
+
 
 
     }
@@ -185,11 +195,15 @@ public class View extends SurfaceView
 
 
         canvas.drawBitmap(backgroundimagebitmap, 0, 0, null);
-        if (spaceship.isvisible == true) {
+        if(spaceship.getHitstaken()<3) {
             spaceship.draw(canvas);
             spaceship.updateBoundingBox();
             spaceship.testcollision(canvas);
+        }else{
+            Intent gameOverScreen = new Intent(this.getContext(), gameover.class);
+            this.getContext().startActivity(gameOverScreen);
         }
+
         spaceship.drawExplosion(canvas);
 
         //all the enemies are destroyed so present the game over screen
@@ -214,8 +228,8 @@ public class View extends SurfaceView
                     yellow.setColor(Color.YELLOW);
                     yellow.setStyle(Paint.Style.FILL);
                     canvas.drawRect(rectangle, yellow);
-                    //COLLISION OF PLSAYERSHIP WITH BULLET HERE
-                    spaceship.collision(rectangle);
+                    //COLLISION OF PLAYERSHIP WITH BULLET HERE
+                    spaceship.collision(rectangle, bullet);
                     if (spaceship.hit == true){
                         spaceship.ifCollisionIsTrue(this.context);
                     }

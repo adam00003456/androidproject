@@ -29,6 +29,9 @@ public class Enemy {
     private int mostrightmovement;
     private int mostleftmovement;
     private int identifier;
+    private Explosion mExplosion;
+    private final static int NUM_PARTICLES = 25;
+    private int currentAlpha = 255;
 
 
     public Enemy(Bitmap bitmap, int x, int y, int identifier) {
@@ -140,6 +143,14 @@ public class Enemy {
             }
         } else {
             setTouched(false);
+        }
+    }
+
+    public void drawExplosion(Canvas canvas){
+        if(mExplosion != null)
+            mExplosion.update(canvas);
+        if (mExplosion != null && mExplosion.isDead()) {
+            currentAlpha = 255;
         }
     }
 }

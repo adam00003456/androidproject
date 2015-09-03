@@ -8,11 +8,16 @@ public class Bullet {
     private int x, y, speed;
     private boolean visible;
 
+
     public Bullet(int startingX, int startingY) {
         x = startingX;
         y = startingY;
         speed = 7;
         visible = true;
+    }
+
+    public void setVisibility(){
+        visible = false;
     }
 
     public void updateenemybullet(int heightofscreen) {
