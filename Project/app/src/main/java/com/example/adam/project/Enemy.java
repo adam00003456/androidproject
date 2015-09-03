@@ -1,5 +1,6 @@
 package com.example.adam.project;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ public class Enemy {
     private Explosion mExplosion;
     private final static int NUM_PARTICLES = 25;
     private int currentAlpha = 255;
+    private Paint alphaPaint = new Paint();
 
 
     public Enemy(Bitmap bitmap, int x, int y, int identifier) {
@@ -64,24 +66,27 @@ public class Enemy {
     }
 
     //enemy collides with bullet
-    public boolean collision(Rect rectofbullet) {
+    public boolean collision(Rect rectofbullet, Bullet bullet) {
         if (rectofbullet.intersect(boundingbox)) {
             isvisible = false;
+            bullet.setVisibility();
             return true;
         }
+
 
         return false;
     }
 
     public void updateBoundingBox(){
-        boundingbox.set((this.getX()-(this.getBitmap().getWidth() / 2)),
-                (this.getY()-(this.getBitmap().getHeight() / 2)),
-                (this.getX()-(this.getBitmap().getWidth() / 2))+this.getBitmap().getWidth(),
-                (this.getY()-(this.getBitmap().getHeight() / 2)+this.getBitmap().getHeight()));
+        boundingbox.set((this.getX() - (this.getBitmap().getWidth() / 2)),
+                (this.getY() - (this.getBitmap().getHeight() / 2)),
+                (this.getX() - (this.getBitmap().getWidth() / 2)) + this.getBitmap().getWidth(),
+                (this.getY() - (this.getBitmap().getHeight() / 2) + this.getBitmap().getHeight()));
     }
 
     public void shoot(int x, int y) {
-        Bullet b = new Bullet(this.x + 50, this.y - 50);
+        Bullet b = new Bullet(x - (bitmap.getWidth() / 2) + (this.bitmap.getWidth()/2),
+                y - (bitmap.getHeight() / 2) + (this.bitmap.getHeight()));
         bullets.add(b);
 
     }
@@ -123,7 +128,7 @@ public class Enemy {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2),  y - (bitmap.getHeight() / 2), null);
     }
 
     public void testcollision(Canvas canvas){
@@ -146,12 +151,31 @@ public class Enemy {
         }
     }
 
-    public void drawExplosion(Canvas canvas){
+    public boolean drawExplosion(Canvas canvas){
         if(mExplosion != null)
             mExplosion.update(canvas);
         if (mExplosion != null && mExplosion.isDead()) {
             currentAlpha = 255;
+            mExplosion = null;
+            return true;
+        }
+        return false;
+    }
+
+    public void afterIfCollisionIsTrue(){
+        if(currentAlpha>0){
+            currentAlpha=currentAlpha-30;
+            alphaPaint.setAlpha(currentAlpha);
         }
     }
+
+    public void ifCollisionIsTrue(Context context){
+        if (mExplosion==null || mExplosion.isDead()) {
+            mExplosion = new Explosion(NUM_PARTICLES, x-(this.getBitmap().getWidth() / 2),
+                    y-(this.getBitmap().getHeight() / 2), context);
+
+        }
+    }
+
 }
 

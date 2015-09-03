@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
      *  prompted to gesture towards.*/
     private Path.Direction mCurrentDirection;
     public View mView;
-    private ToggleButton toggleButton;
     private WindowManager wm;
+    private MediaPlayer mediaPlayer;
 
 
 
@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         mView.setcontroller();
         //set NEW CONTENT VIEW HERE
         setContentView(mView);
-        MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.themesong);
+        mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.themesong);
         mediaPlayer.start();
 
     }

@@ -25,6 +25,9 @@ public class Explosion {
             mParticles[i] = p;
         }
     }
+    public Particle[] getmParticles(){
+        return mParticles;
+    }
 
     public boolean isDead() {
         return mState == DEAD;

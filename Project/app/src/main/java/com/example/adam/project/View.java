@@ -13,12 +13,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
 
 
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class View extends SurfaceView
     private WindowManager wm;
     private int widthofscreen = 0;
     private int heightofscreen = 0;
+    private Vibrator v;
 
 
 
@@ -55,9 +58,7 @@ public class View extends SurfaceView
         this.context = context;
         backgroundimagebitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.starrynightone);
-
-
-
+        v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
         //create a game loop that will handle constant updating and drawing to screen
         thread = new MainGameThread(getHolder(), this);
         //view must be focusable so it can handle events that
@@ -214,6 +215,12 @@ public class View extends SurfaceView
         for (int i = 0; i < enemylist.size(); i++) {
             //hardcoded coords for simplicity
             Enemy eo = enemylist.get(i);
+            //check for explosion for each enemy ship
+
+            if (eo.drawExplosion(canvas) == true){
+                eo.getBitmap().recycle();
+                enemylist.remove(eo);
+            }
             if (eo.isvisible == true) {
                 eo.draw(canvas);
                 eo.updateBoundingBox();
@@ -232,14 +239,15 @@ public class View extends SurfaceView
                     spaceship.collision(rectangle, bullet);
                     if (spaceship.hit == true){
                         spaceship.ifCollisionIsTrue(this.context);
+                        v.vibrate(500);
                     }
                     //spaceship(PLAYER)collides with bullet
                     //gameover occurs here
-                    if (spaceship.isvisible == false) {
+                    //if (spaceship.isvisible == false) {
 
                         //Intent gameOverScreen = new Intent(this.getContext(), gameover.class);
                         //this.getContext().startActivity(gameOverScreen);
-                    }
+                    //}
                 }
             }
         }
@@ -271,10 +279,10 @@ public class View extends SurfaceView
                 for (int itter = 0; itter < enemylist.size(); itter++) {
                     Enemy eo = enemylist.get(itter);
                     //ENEMYSHIP GETS HIT WITH BULLET HERE
-                    if (eo.collision(rectangle) == true) {
+                    if (eo.collision(rectangle, bullet) == true) {
                         //remove the destroyed enemyship from here
-                        enemylist.remove(eo.getIdentifier());
-                        updatesizeofenemyship();
+                        eo.ifCollisionIsTrue(this.context);
+
 
                     }
                 }
@@ -283,11 +291,6 @@ public class View extends SurfaceView
 
     }
 
-    private void updatesizeofenemyship(){
-        for (int i =0; i < enemylist.size(); i++) {
-            enemylist.get(i).setIdentifier(i);
-        }
-    }
 
     public void update() {
 
@@ -334,6 +337,10 @@ public class View extends SurfaceView
             }
         }
         for (int itter = 0; itter < enemylist.size(); itter++) {
+            //update the alpha countdown for any exploding enemy ships
+            if (enemylist.get(itter).isvisible == true){
+                spaceship.afterIfCollisionIsTrue();
+            }
             if (enemylist.get(itter).bulletarraygetter().size() == 0) {
                 enemylist.get(itter).shoot(enemylist.get(itter).getX(), enemylist.get(itter).getY());
             } else {
