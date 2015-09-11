@@ -3,21 +3,17 @@ package com.example.adam.project;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Path;
-import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 import android.util.Log;
-import android.widget.ToggleButton;
 
 
-public class MainActivity extends Activity {
+public class mainActivity extends Activity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = mainActivity.class.getSimpleName();
     private String controllertype;
     /** The current direction that the user is being
      *  prompted to gesture towards.*/
@@ -37,9 +33,9 @@ public class MainActivity extends Activity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mView = new View(MainActivity.this);
-        mView.setActivity(MainActivity.this);
-        //get passed intent from mainmenu
+        mView = new View(mainActivity.this);
+        mView.setActivity(mainActivity.this);
+        //get passed intent from mainMenu
         Intent intent = getIntent();
         //get controller type from intent
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -52,7 +48,7 @@ public class MainActivity extends Activity {
         mView.setcontroller();
         //set NEW CONTENT VIEW HERE
         setContentView(mView);
-        mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.themesong);
+        mediaPlayer = MediaPlayer.create(mainActivity.this,R.raw.themesong);
         mediaPlayer.start();
 
     }

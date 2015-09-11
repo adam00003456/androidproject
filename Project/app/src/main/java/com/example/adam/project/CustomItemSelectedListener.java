@@ -8,7 +8,7 @@ import android.widget.Toast;
 /**
  * Created by Adam on 7/20/2015.
  */
-public class CustomItemSelectedListener implements AdapterView.OnItemSelectedListener {
+public class customItemSelectedListener implements AdapterView.OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Toast.makeText(parent.getContext(), "On Item Select: \n" +

@@ -12,7 +12,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,8 +29,8 @@ public class View extends SurfaceView
         implements SurfaceHolder.Callback {
 
     private static final String TAG = View.class.getSimpleName();
-    private MainGameThread thread;
-    private Spaceship spaceship;
+    private mainGameThread thread;
+    private spaceShip spaceShip;
     private String controllertype = "";
     private controller hud;
     private int numberofenemies = 4;
@@ -40,9 +39,9 @@ public class View extends SurfaceView
     private int enemy = 50;
     private boolean goingright = true;
     public Context context;
-    private Activity Activityusedtocreate;
-    private Bitmap backgroundimagebitmap;
-    private WindowManager wm;
+    private Activity activityUsedToCreate;
+    private Bitmap backgroundImageBitmap;
+    private WindowManager windowManager;
     private int widthofscreen = 0;
     private int heightofscreen = 0;
     private Vibrator v;
@@ -56,11 +55,11 @@ public class View extends SurfaceView
         // the surface
         getHolder().addCallback(this);
         this.context = context;
-        backgroundimagebitmap = BitmapFactory.decodeResource(getResources(),
+        backgroundImageBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.starrynightone);
         v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
         //create a game loop that will handle constant updating and drawing to screen
-        thread = new MainGameThread(getHolder(), this);
+        thread = new mainGameThread(getHolder(), this);
         //view must be focusable so it can handle events that
         //occur on the surface
         setFocusable(true);
@@ -68,7 +67,7 @@ public class View extends SurfaceView
 
     }
 
-    public void loadplayerandenemies(){
+    public void loadPlayerAndEnemies(){
         //run a for loop to populate an arraylist with the amount of enemies you have
         for (int i = 0; i < numberofenemies; i++) {
             //hardcoded coords for simplicity
@@ -78,15 +77,15 @@ public class View extends SurfaceView
         }
 
 
-        //create spaceship and load it's different stages bitmaps
-        spaceship = new Spaceship(BitmapFactory.decodeResource(getResources(), R.drawable.galaga), 20,
+        //create spaceShip and load it's different stages bitmaps
+        spaceShip = new spaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.galaga), 20,
                 (int)(heightofscreen*.76));
         Bitmap spaceshipBitMapToAddOne = BitmapFactory.decodeResource(getResources(),
                 R.drawable.galagahitone);
-        spaceship.addToArrayList(spaceshipBitMapToAddOne);
+        spaceShip.addToArrayList(spaceshipBitMapToAddOne);
         Bitmap spaceshipBitMapToAddTwo = BitmapFactory.decodeResource(getResources(),
                 R.drawable.galagahittwo);
-        spaceship.addToArrayList(spaceshipBitMapToAddTwo);
+        spaceShip.addToArrayList(spaceshipBitMapToAddTwo);
 
 
 
@@ -94,7 +93,7 @@ public class View extends SurfaceView
     }
 
     public void setWindowManager(WindowManager wm){
-        this.wm = wm;
+        this.windowManager = wm;
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
         widthofscreen = metrics.widthPixels;
@@ -102,7 +101,7 @@ public class View extends SurfaceView
     }
 
     public void setActivity(Activity activity) {
-        Activityusedtocreate = activity;
+        activityUsedToCreate = activity;
     }
 
     @Override
@@ -110,35 +109,32 @@ public class View extends SurfaceView
     int width, int height){
     }
 
-    public accelerometercontroller getteracceleratorHud() {
-        return (accelerometercontroller)hud;
+    public accelerometerController getterAcceleratorHud() {
+        return (accelerometerController)hud;
     }
 
-    public voicecontroller gettergestureHud() {
-        return (voicecontroller)hud;
-    }
 
-    public void setcontroller(){
+    public void setController(){
 
         //set positions of the HUD images
         if(controllertype.equals("Buttons")) {
-            hud = new buttoncontroller(context);
+            hud = new buttonController(context);
             hud.PositionSetter((int) (.15 * widthofscreen), (int) (.90 * heightofscreen), (int) (.85 * widthofscreen),
                     (int) (.90 * heightofscreen), (int) (.54 * widthofscreen), (int)(.90 * heightofscreen));
-            hud.spaceshipobjectsetter(spaceship);
+            hud.spaceshipobjectsetter(spaceShip);
 
         }
         else if(controllertype.equals("Touch")){
-            hud = new swipecontroller(context);
-            hud.spaceshipobjectsetter(spaceship);
+            hud = new swipeController(context);
+            hud.spaceshipobjectsetter(spaceShip);
         }
         else if(controllertype.equals("Voice")){
-            hud = new voicecontroller(Activityusedtocreate, context);
-            hud.spaceshipobjectsetter(spaceship);
+            hud = new voiceController(activityUsedToCreate, context);
+            hud.spaceshipobjectsetter(spaceShip);
         }
         else if(controllertype.equals("Accelerometer")){
-            hud = new accelerometercontroller(Activityusedtocreate);
-            hud.spaceshipobjectsetter(this.spaceship);
+            hud = new accelerometerController(activityUsedToCreate);
+            hud.spaceshipobjectsetter(this.spaceShip);
         }
     }
 
@@ -169,14 +165,14 @@ public class View extends SurfaceView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(controllertype.equals("Buttons")) {
-            return ((buttoncontroller)hud).onTouch(event);
+            return ((buttonController)hud).onTouch(event);
         }
         else if(controllertype.equals("Touch")){
-            return ((swipecontroller)hud).onTouch(event);
+            return ((swipeController)hud).onTouch(event);
         }
 
         else if(controllertype.equals("Voice")){
-            ((voicecontroller)hud).onTouch();
+            ((voiceController)hud).onTouch();
             return true;
         }
 
@@ -195,21 +191,21 @@ public class View extends SurfaceView
     protected void onDraw(Canvas canvas) {
 
 
-        canvas.drawBitmap(backgroundimagebitmap, 0, 0, null);
-        if(spaceship.getHitstaken()<3) {
-            spaceship.draw(canvas);
-            spaceship.updateBoundingBox();
-            spaceship.testcollision(canvas);
+        canvas.drawBitmap(backgroundImageBitmap, 0, 0, null);
+        if(spaceShip.getHitsTaken()<3) {
+            spaceShip.draw(canvas);
+            spaceShip.updateBoundingBox();
+            spaceShip.testCollision(canvas);
         }else{
-            Intent gameOverScreen = new Intent(this.getContext(), gameover.class);
+            Intent gameOverScreen = new Intent(this.getContext(), gameOver.class);
             this.getContext().startActivity(gameOverScreen);
         }
 
-        spaceship.drawExplosion(canvas);
+        spaceShip.drawExplosion(canvas);
 
         //all the enemies are destroyed so present the game over screen
         if (enemylist.isEmpty()) {
-            Intent gameOverScreen = new Intent(this.getContext(), gameover.class);
+            Intent gameOverScreen = new Intent(this.getContext(), gameOver.class);
             this.getContext().startActivity(gameOverScreen);
         }
         for (int i = 0; i < enemylist.size(); i++) {
@@ -236,39 +232,32 @@ public class View extends SurfaceView
                     yellow.setStyle(Paint.Style.FILL);
                     canvas.drawRect(rectangle, yellow);
                     //COLLISION OF PLAYERSHIP WITH BULLET HERE
-                    spaceship.collision(rectangle, bullet);
-                    if (spaceship.hit == true){
-                        spaceship.ifCollisionIsTrue(this.context);
+                    spaceShip.collision(rectangle, bullet);
+                    if (spaceShip.hit == true){
+                        spaceShip.ifCollisionIsTrue(this.context);
                         v.vibrate(500);
                     }
-                    //spaceship(PLAYER)collides with bullet
-                    //gameover occurs here
-                    //if (spaceship.isvisible == false) {
-
-                        //Intent gameOverScreen = new Intent(this.getContext(), gameover.class);
-                        //this.getContext().startActivity(gameOverScreen);
-                    //}
                 }
             }
         }
         if(controllertype.equals("Buttons")) {
 
-            ((buttoncontroller) hud).display(canvas);
+            ((buttonController) hud).display(canvas);
         }
         else if(controllertype.equals("Touch")) {
 
-            ((swipecontroller)hud).display(canvas);
+            ((swipeController)hud).display(canvas);
         }
         else if(controllertype.equals("Voice")){
-            ((voicecontroller)hud).display(canvas);
+            ((voiceController)hud).display(canvas);
         }
         else if(controllertype.equals("Accelerometer")){
 
-            ((accelerometercontroller)hud).display(canvas);
+            ((accelerometerController)hud).display(canvas);
         }
 
-        for (int i = 0; i < spaceship.bulletarraygetter().size(); i++) {
-            Bullet bullet = spaceship.bulletarraygetter().get(i);
+        for (int i = 0; i < spaceShip.bulletArrayGetter().size(); i++) {
+            Bullet bullet = spaceShip.bulletArrayGetter().get(i);
             if (bullet.isVisible()) {
                 Rect rectangle = new Rect();
                 rectangle.set(bullet.getX()-20, bullet.getY()-10, bullet.getX(), bullet.getY());
@@ -294,15 +283,15 @@ public class View extends SurfaceView
 
     public void update() {
 
-        if (spaceship.hit == true){
-            spaceship.afterIfCollisionIsTrue();
+        if (spaceShip.hit == true){
+            spaceShip.afterIfCollisionIsTrue();
         }
-        //call update method of each spaceship here
-        //in update we will be be moving the spaceship based
+        //call update method of each spaceShip here
+        //in update we will be be moving the spaceShip based
         //off the barriers that surround it
         hud.updatebulletdelay();
         if(controllertype.equals("Voice")){
-            ((voicecontroller)hud).update();
+            ((voiceController)hud).update();
         }
 
 
@@ -328,24 +317,31 @@ public class View extends SurfaceView
         //as a result, the position of the image should
         //be updated before it is drawn
         //thus having the effect of traveling up the screen
-        for (int i = 0; i < spaceship.bulletarraygetter().size(); i++) {
-            Bullet bullet = spaceship.bulletarraygetter().get(i);
+        for (int i = 0; i < spaceShip.bulletArrayGetter().size(); i++) {
+            Bullet bullet = spaceShip.bulletArrayGetter().get(i);
             if (bullet.isVisible()) {
                 bullet.update();
             } else if (!bullet.isVisible()) {
-                spaceship.bulletarraygetter().remove(i);
+                spaceShip.bulletArrayGetter().remove(i);
             }
         }
         for (int itter = 0; itter < enemylist.size(); itter++) {
             //update the alpha countdown for any exploding enemy ships
             if (enemylist.get(itter).isvisible == true){
-                spaceship.afterIfCollisionIsTrue();
+                spaceShip.afterIfCollisionIsTrue();
             }
+            //if the bullet array for the enemy ship is empty, add a new bullet upon shoot
             if (enemylist.get(itter).bulletarraygetter().size() == 0) {
-                enemylist.get(itter).shoot(enemylist.get(itter).getX(), enemylist.get(itter).getY());
+                if(controllertype.equals("Voice")) {
+                    enemylist.get(itter).shoot(enemylist.get(itter).getX(), enemylist.get(itter).getY(), 4);
+                }else{
+                    enemylist.get(itter).shoot(enemylist.get(itter).getX(), enemylist.get(itter).getY(), 7);
+                }
             } else {
+                //if the bullet is visible on the screen currently simply update it
                 if (enemylist.get(itter).bulletarraygetter().get(0).isVisible()) {
                     enemylist.get(itter).bulletarraygetter().get(0).updateenemybullet(heightofscreen);
+                //if the bullet is not visible on the screen anymore simply remove it from the bullet array of the enemy ship
                 } else if (!enemylist.get(itter).bulletarraygetter().get(0).isVisible()) {
                     enemylist.get(itter).bulletarraygetter().remove(0);
                 }

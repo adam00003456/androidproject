@@ -4,47 +4,44 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import java.util.logging.Logger;
-
 /**
  * Created by Adam on 8/9/2015.
  */
-public class swipecontroller extends controller {
+public class swipeController extends controller {
 
-    private Bitmap swipgrid; // make swipe gestures on
+    private Bitmap swipGrid; // make swipe gestures on
     public Context context;
     private GestureDetectorCompat gDetect;
     private Canvas canvas;
 
-    public swipecontroller(Context context) {
+    public swipeController(Context context) {
         this.context = context;
-        this.swipgrid =
+        this.swipGrid =
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.touchcontroller);
 
         gDetect = new GestureDetectorCompat(context, new GestureListener());
 
 
     }
-    //positionsetter from parent
 
-    public void motionevent(MotionEvent motionEvent){
+    //positionsetter from parent
+    public void motionEvent(MotionEvent motionEvent){
         gDetect.onTouchEvent(motionEvent);
     }
 
     public void display(Canvas canvas) {
+        this.handleMovement(spaceShip);
         touchedfire = false;
         this.canvas = canvas;
         Rect rectangle = new Rect();
         rectangle.set(0, (int)(canvas.getHeight() * .80), canvas.getWidth(), canvas.getHeight());
         super.maxwidthforship = canvas.getWidth();
-        canvas.drawBitmap(swipgrid, null, rectangle, null);
+        canvas.drawBitmap(swipGrid, null, rectangle, null);
     }
 
     //helper method that helps crate a gesture detector object
@@ -122,33 +119,13 @@ public class swipecontroller extends controller {
 
 
         public boolean onTouch(MotionEvent event) {
-            this.motionevent(event);
-            this.handleMovement(spaceship);
+            this.motionEvent(event);
+
             if (this.touchedfire == true) {
-                spaceship.shoot(spaceship.getX(), spaceship.getY());
+                spaceShip.shoot(spaceShip.getX(), spaceShip.getY());
             }
             return true;
         }
 
-        public void handleMovement(Spaceship spaceship) {
 
-            if (touchedleft == true && touchedright == false) {
-                int tempx;
-                tempx = spaceship.getX();
-                tempx -= 100;
-                if (tempx >= 0)
-                    spaceship.setX(tempx);
-                touchedleft = false;
-                touchedright = false;
-            } else if (touchedright == true && touchedleft == false) {
-                int tempx;
-                tempx = spaceship.getX();
-                tempx += 100;
-                if (tempx <= maxwidthforship)
-                    spaceship.setX(tempx);
-                touchedright = false;
-                touchedleft = false;
-            }
-
-        }
     }

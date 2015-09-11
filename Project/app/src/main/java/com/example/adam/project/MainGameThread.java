@@ -1,6 +1,5 @@
 package com.example.adam.project;
 import android.graphics.Canvas;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.util.Log;
 
@@ -8,16 +7,16 @@ import android.util.Log;
  * Created by Adam on 12/20/2014.
  */
 
-public class MainGameThread extends Thread{
+public class mainGameThread extends Thread{
     private boolean running;
-    private static final String TAG = MainGameThread.class.getSimpleName();
+    private static final String TAG = mainGameThread.class.getSimpleName();
     private SurfaceHolder surfaceHolder;
     private View gameview;
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-    public MainGameThread(SurfaceHolder surfaceHolder,
+    public mainGameThread(SurfaceHolder surfaceHolder,
                           View gameview)
     {
         super();

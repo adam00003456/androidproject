@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by Adam on 8/12/2015.
  */
-public class voicecontroller extends controller implements RecognitionListener {
+public class voiceController extends controller implements RecognitionListener {
 
     /** Sensor that detects gestures. Calls the appropriate
      *  functions when the motions are recognized. */
@@ -33,7 +33,7 @@ public class voicecontroller extends controller implements RecognitionListener {
 
 
 
-    public voicecontroller(Activity activity, Context context){
+    public voiceController(Activity activity, Context context){
         mAudioManager = (AudioManager) activity.getSystemService(context.AUDIO_SERVICE);
         speech = SpeechRecognizer.createSpeechRecognizer(context);
         speech.setRecognitionListener(this);
@@ -50,11 +50,6 @@ public class voicecontroller extends controller implements RecognitionListener {
     }
 
 
-
-
-
-
-
     public void display(Canvas canvas) {
 
         Rect rectangle = new Rect();
@@ -67,11 +62,11 @@ public class voicecontroller extends controller implements RecognitionListener {
         Paint white = new Paint();
         white.setColor(Color.WHITE);
         white.setTextSize(100);
-        canvas.drawText("Voice Mode", (canvas.getWidth() / 4), (int)(canvas.getHeight() * .90), white);
+        canvas.drawText("Voice Mode", (canvas.getWidth() / 4), (int) (canvas.getHeight() * .90), white);
     }
 
 
-    public void callisDoubleTapped(){
+    public void callIsDoubleTapped(){
 
         if(isTapped == true){
             speech.startListening(recognizerIntent);
@@ -80,30 +75,6 @@ public class voicecontroller extends controller implements RecognitionListener {
             speech.stopListening();
 
         }
-    }
-
-
-
-
-    @Override
-    public void handleMovement(Spaceship spaceship) {
-
-        if (touchedleft == true && touchedright == false) {
-            int tempx = spaceship.getX();
-            tempx -= 1;
-            if (tempx >= 0)
-                spaceship.setX(tempx);
-        }
-
-        if (touchedright == true && touchedleft == false) {
-            int tempx;
-            tempx = spaceship.getX();
-            tempx += 1;
-            if (tempx <= maxwidthforship)
-                spaceship.setX(tempx);
-        }
-
-
     }
 
     @Override
@@ -135,7 +106,7 @@ public class voicecontroller extends controller implements RecognitionListener {
         Log.i(LOGTAG, "End of the speech");
         isTapped = false;
         flipper = true;
-        callisDoubleTapped();
+        callIsDoubleTapped();
     }
 
     @Override
@@ -219,16 +190,16 @@ public class voicecontroller extends controller implements RecognitionListener {
     public void onTouch(){
         if(isTapped == false) {
             isTapped = true;
-            callisDoubleTapped();
+            callIsDoubleTapped();
         }
     }
 
     //unlike other controllers, needs to be in update because a gameplay action is not expected to happen right
     //after an on screen event(like touch in this example)
     public void update(){
-        this.handleMovement(spaceship);
+        this.handleMovement(spaceShip);
         if (this.touchedfire == true) {
-            spaceship.shoot(spaceship.getX(), spaceship.getY());
+            spaceShip.shoot(spaceShip.getX(), spaceShip.getY());
             this.touchedfire = false;
         }
     }

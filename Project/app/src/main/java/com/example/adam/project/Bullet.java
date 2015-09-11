@@ -9,10 +9,10 @@ public class Bullet {
     private boolean visible;
 
 
-    public Bullet(int startingX, int startingY) {
+    public Bullet(int startingX, int startingY, int speed) {
         x = startingX;
         y = startingY;
-        speed = 7;
+        this.speed = speed;
         visible = true;
     }
 
@@ -22,7 +22,6 @@ public class Bullet {
 
     public void updateenemybullet(int heightofscreen) {
         y += speed;
-        //we can make this more dynamic
         if (y > (int)(.90 * heightofscreen)) {
             visible = false;
         }
@@ -43,23 +42,9 @@ public class Bullet {
         return y;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
 
     public boolean isVisible() {
         return visible;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void setSpeed(int speed) { this.speed = speed; }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setX(int x) { this.x = x; }
 }

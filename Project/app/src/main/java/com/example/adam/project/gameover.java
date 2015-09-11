@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 
-public class gameover extends Activity {
+public class gameOver extends Activity {
 
     private ImageView mImageView;
 

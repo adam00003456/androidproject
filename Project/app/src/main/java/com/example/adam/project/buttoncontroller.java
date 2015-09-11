@@ -12,14 +12,14 @@ import android.view.MotionEvent;
 /**
  * Created by Adam on 8/6/2015.
  */
-public class buttoncontroller extends controller {
+public class buttonController extends controller {
     public Bitmap bitmapleftarrow; // the actual bitmap
     public Bitmap bitmaprightarrow; // the actual bitmap
     public Bitmap bitmapfirearrow;
     public Context context;
 
 
-    public buttoncontroller(Context context) {
+    public buttonController(Context context) {
 
         this.bitmapleftarrow = BitmapFactory.decodeResource(context.getResources(), R.drawable.leftarrow);
         this.bitmaprightarrow = BitmapFactory.decodeResource(context.getResources(), R.drawable.rightarrow);
@@ -29,10 +29,10 @@ public class buttoncontroller extends controller {
 
     //positionsetter from parent
     public void display(Canvas canvas) {
+        this.handleMovement(spaceShip);
         Rect rectangle = new Rect();
         rectangle.set(0, (int)(.80 * canvas.getHeight()), canvas.getWidth(), canvas.getHeight());
         super.maxwidthforship = canvas.getWidth();
-        //canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
         Paint gray = new Paint();
         gray.setColor(Color.GRAY);
         gray.setStyle(Paint.Style.FILL);
@@ -43,23 +43,63 @@ public class buttoncontroller extends controller {
     }
 
 
-
-
-
-
     public boolean onTouch(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             this.handleActionDown((int) event.getX(), (int) event.getY(), this.bitmapleftarrow, 0);
             this.handleActionDown((int) event.getX(), (int) event.getY(), this.bitmaprightarrow, 1);
             this.handleActionDown((int) event.getX(), (int) event.getY(), this.bitmapfirearrow, 2);
-            this.handleMovement(spaceship);
+
             if (this.touchedfire == true && delaytimeforbullet == 0) {
-                spaceship.shoot(spaceship.getX(), spaceship.getY());
+                spaceShip.shoot(spaceShip.getX(), spaceShip.getY());
                 delaytimeforbullet = 2000;
             }
         }
         return true;
     }
+
+    public void handleActionDown(int eventX, int eventY, Bitmap image, int chooser) {
+        int positionx = 0;
+        int positiony = 0;
+        if (chooser == 0) {
+            positionx = posleftx;
+            positiony = poslefty;
+        } else if (chooser == 1) {
+            positionx = posrightx;
+            positiony = posrighty;
+        } else if (chooser == 2) {
+            positionx = posfirex;
+            positiony = posfirey;
+        }
+
+        if (eventX >= (positionx - image.getWidth() / 2)&&(eventX <= (positionx + image.getWidth()/2))) {
+            if (eventY >= (positiony - image.getHeight() / 2) && (positiony <= (positiony + image.getHeight() / 2))) {
+                //leftarrow was touched here
+                if (chooser == 0) {
+                    touchedleft = true;
+                    touchedright = false;
+                    //rightarrow was touched here
+                }else if (chooser == 1) {
+                    touchedright = true;
+                    touchedleft = false;
+                    //firebutton was touched here
+                } else if (chooser == 2) {
+                    touchedfire = true;
+                }
+            }
+            //else if everything remains the same it should be false
+
+        } else {
+            if (chooser == 0) {
+                touchedleft = false;
+            }else if (chooser == 1){
+                touchedright = false;
+            } else if (chooser == 2) {
+                touchedfire = false;
+            }
+        }
+    }
+
+
 
 
 

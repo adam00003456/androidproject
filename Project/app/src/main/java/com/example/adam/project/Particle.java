@@ -31,9 +31,6 @@ public class Particle {
         return mState == ALIVE;
     }
 
-    public Bitmap accessBitmap() {
-        return this.mBase;
-    }
 
     public Particle(int x, int y, int lifetime,
                     int maxSpeed, int maxScale,

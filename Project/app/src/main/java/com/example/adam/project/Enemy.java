@@ -24,12 +24,11 @@ public class Enemy {
     private Bitmap bitmap; // the actual bitmap
     private int x;  //the X coordinate
     private int y;  //the Y coordinate
-    private boolean touched;// true if spaceship is touched
+    private boolean touched;// true if spaceShip is touched
     public boolean isvisible;
     private Rect boundingbox;
     private int mostrightmovement;
     private int mostleftmovement;
-    private int identifier;
     private Explosion mExplosion;
     private final static int NUM_PARTICLES = 25;
     private int currentAlpha = 255;
@@ -45,14 +44,6 @@ public class Enemy {
         //CHANGE HARDCODED SPEEDS HERE
         mostrightmovement = x + 300;
         mostleftmovement =  x - 300;
-        this.identifier = identifier;
-    }
-
-    //grab identifier for removal of the arraylist it was added into
-    public int getIdentifier() {return identifier; }
-
-    public void setIdentifier(int newIdentifier) {
-        this.identifier = newIdentifier;
     }
 
     //grab x rightmostboundary of enemyship
@@ -84,9 +75,10 @@ public class Enemy {
                 (this.getY() - (this.getBitmap().getHeight() / 2) + this.getBitmap().getHeight()));
     }
 
-    public void shoot(int x, int y) {
+    //coordinates for the bullet
+    public void shoot(int x, int y, int speedofbullet) {
         Bullet b = new Bullet(x - (bitmap.getWidth() / 2) + (this.bitmap.getWidth()/2),
-                y - (bitmap.getHeight() / 2) + (this.bitmap.getHeight()));
+                y - (bitmap.getHeight() / 2) + (this.bitmap.getHeight()), speedofbullet);
         bullets.add(b);
 
     }
@@ -128,7 +120,7 @@ public class Enemy {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2),  y - (bitmap.getHeight() / 2), null);
+        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
     }
 
     public void testcollision(Canvas canvas){
@@ -136,19 +128,6 @@ public class Enemy {
         paint.setColor(Color.GREEN);
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(boundingbox, paint);
-    }
-
-    public void handleActionDown(int eventX, int eventY) {
-        if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth() / 2))) {
-            if (eventY >= (y - bitmap.getHeight() / 2) && (y <= (y + bitmap.getHeight() / 2))) {
-                //spaceship was TOUCHED here
-                setTouched(true);
-            } else {
-                setTouched(false);
-            }
-        } else {
-            setTouched(false);
-        }
     }
 
     public boolean drawExplosion(Canvas canvas){

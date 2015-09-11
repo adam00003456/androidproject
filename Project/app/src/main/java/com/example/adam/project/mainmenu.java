@@ -2,10 +2,7 @@ package com.example.adam.project;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.*;
 import android.view.View;
@@ -16,10 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import android.graphics.Canvas;
 
 
-public class mainmenu extends Activity {
+public class mainMenu extends Activity {
 
     private Spinner spinner;
     private Button btnStartGame;
@@ -40,11 +36,6 @@ public class mainmenu extends Activity {
         /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.starrynight);
         Canvas canvas = new Canvas();
         canvas.drawBitmap(bitmap, displaySize.x, displaySize.y,null);*/
-
-
-
-
-
         spinner = (Spinner) findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
         list.add("Buttons");
@@ -71,21 +62,17 @@ public class mainmenu extends Activity {
     //Spinner Data is added here
     public void addListenerOnSpinnerItemSelection(){
             //used custom itemselection in object to keep clean code
-            spinner.setOnItemSelectedListener(new CustomItemSelectedListener());
+            spinner.setOnItemSelectedListener(new customItemSelectedListener());
     }
 
     //get the selected spinner list value
-
     public void addListenerOnButton() {
-
         spinner = (Spinner) findViewById(R.id.spinner);
-
         btnStartGame = (Button) findViewById(R.id.button);
-
         btnStartGame.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mainmenu.this, "On Button Click : " +
+                Toast.makeText(mainMenu.this, "On Button Click : " +
                                 "\n" + String.valueOf(spinner.getSelectedItem()),
                         Toast.LENGTH_LONG).show();
                 buttonClick(String.valueOf(spinner.getSelectedItem()));
@@ -96,7 +83,7 @@ public class mainmenu extends Activity {
 
     private void buttonClick(String identifierType) {
         //create an intent action
-        Intent intent = new Intent("com.example.adam.project.MainActivity");
+        Intent intent = new Intent("com.example.adam.project.mainActivity");
         switch (identifierType) {
             case "Buttons":
                 //put key/value data

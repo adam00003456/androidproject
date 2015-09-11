@@ -1,14 +1,5 @@
 package com.example.adam.project;
 
-import com.example.adam.project.Spaceship;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 
 /**
  * Created by Adam on 12/20/2014.
@@ -24,7 +15,7 @@ public class controller {
     protected int posfirex;
     protected int posfirey;
     protected int maxwidthforship;
-    protected Spaceship spaceship;
+    protected spaceShip spaceShip;
     protected int delaytimeforbullet = 0;
 
 
@@ -37,28 +28,7 @@ public class controller {
         this.posfirey = posfireY;
     }
 
-    public void handleMovement(Spaceship spaceship) {
 
-        if (touchedleft == true && touchedright == false) {
-            int tempx;
-            tempx = spaceship.getX();
-            tempx -= 30;
-            if (tempx >= 0)
-                spaceship.setX(tempx);
-            touchedleft = false;
-            touchedright = false;
-        }
-        else if (touchedright == true && touchedleft == false) {
-            int tempx;
-            tempx = spaceship.getX();
-            tempx += 30;
-            if (tempx <= maxwidthforship)
-                spaceship.setX(tempx);
-            touchedright = false;
-            touchedleft = false;
-        }
-
-    }
 
     public void updatebulletdelay(){
         if (delaytimeforbullet > 0){
@@ -66,49 +36,28 @@ public class controller {
         }
     }
 
-    public void spaceshipobjectsetter(Spaceship spaceship) {
+    public void spaceshipobjectsetter(spaceShip spaceShip) {
 
-        this.spaceship = spaceship;
+        this.spaceShip = spaceShip;
     }
 
-    public void handleActionDown(int eventX, int eventY, Bitmap image, int chooser) {
-        int positionx = 0;
-        int positiony = 0;
-        boolean  buttonpresser = false;
-        if (chooser == 0) {
-            positionx = posleftx;
-            positiony = poslefty;
-        } else if (chooser == 1) {
-            positionx = posrightx;
-            positiony = posrighty;
-        } else if (chooser == 2) {
-            positionx = posfirex;
-            positiony = posfirey;
+    public void handleMovement(spaceShip spaceShip) {
+
+        if (touchedleft == true && touchedright == false) {
+            int tempx = spaceShip.getX();
+            tempx -= 5;
+            if (tempx >= 0)
+                spaceShip.setX(tempx);
+        }
+        else if (touchedright == true && touchedleft == false) {
+            int tempx;
+            tempx = spaceShip.getX();
+            tempx += 5;
+            if (tempx <= maxwidthforship)
+                spaceShip.setX(tempx);
         }
 
-        if (eventX >= (positionx - image.getWidth() / 2)&&(eventX <= (positionx + image.getWidth()/2))) {
-            if (eventY >= (positiony - image.getHeight() / 2) && (positiony <= (positiony + image.getHeight() / 2))) {
-                //leftarrow was touched here
-                if (chooser == 0) {
-                    touchedleft = true;
-                //rightarrow was touched here
-                }else if (chooser == 1) {
-                    touchedright = true;
-                //firebutton was touched here
-                } else if (chooser == 2) {
-                    touchedfire = true;
-                }
-            }
-        //else if everything remains the same it should be false
-
-        } else {
-            if (chooser == 0) {
-                touchedleft = false;
-            }else if (chooser == 1){
-                touchedright = false;
-            } else if (chooser == 2) {
-                touchedfire = false;
-            }
-        }
     }
+
+
 }
